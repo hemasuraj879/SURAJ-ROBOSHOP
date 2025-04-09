@@ -14,7 +14,7 @@ spec:
       tier: db
       project: roboshop
   serviceName: "mongodb"
-  replicas: 1
+  replicas: 3
   template:
     metadata:
       labels:
