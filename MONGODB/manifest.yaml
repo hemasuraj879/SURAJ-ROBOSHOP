@@ -4,77 +4,54 @@ metadata:
   name: mongodb
   namespace: suraj
   labels:
+    app: mongodb
     tier: db
-    env: dev
-    project: suraj
-
+    project: roboshop
 spec:
   selector:
     matchLabels:
+      app: mongodb
       tier: db
-      env: dev
-      project: suraj
-  serviceName: mongodb
-  replicas: 3
+      project: roboshop
+  serviceName: "mongodb"
+  replicas: 1
   template:
     metadata:
       labels:
+        app: mongodb
         tier: db
-        env: dev
-        project: suraj
+        project: roboshop
     spec:
       containers:
       - name: mongodb
         image: 296062550816.dkr.ecr.us-east-1.amazonaws.com/suraj/dev/mongodb:latest
-        args:
-        - /bin/sh
-        - -c
-        - touch suraj.txt
-        livenessProbe:
-          exec:
-            command:
-              - cat
-              - suraj.txt
-          initialDelaySeconds: 5
-          periodSeconds: 10
-        imagePullPolicy: Always
-        resources:
-          requests:
-            memory: "500Mi"
-            cpu: "500m"
-          limits:
-            memory: "1000Mi"
-            cpu: "1000m"
         volumeMounts:
         - name: mongodb
           mountPath: /data/db
+  # this is PVC directly.
   volumeClaimTemplates:
   - metadata:
       name: mongodb
     spec:
-      accessModes: ["ReadWriteOnce"]
+      accessModes: [ "ReadWriteOnce" ]
       storageClassName: "ebs-sc"
       resources:
         requests:
           storage: 5Gi
-
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
   name: mongodb
   namespace: suraj
-
 spec:
-  clusterIP: None
+  clusterIP: None #headless
   selector:
+    app: mongodb
     tier: db
-    env: dev
-    project: suraj
-
+    project: roboshop
   ports:
   - name: mongodb-port
     protocol: TCP
-    port: 27017
-    targetPort: 27017
+    port: 27017 # this port belongs to service
+    targetPort: 27017 # this port belongs to container
