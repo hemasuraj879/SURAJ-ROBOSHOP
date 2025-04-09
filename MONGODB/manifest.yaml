@@ -29,12 +29,12 @@ spec:
         args:
         - /bin/sh
         - -c
-        - touch /tmp/suraj
+        - touch suraj.txt
         livenessProbe:
           exec:
             command:
               - cat
-              - /tmp/suraj
+              - suraj.txt
           initialDelaySeconds: 5
           periodSeconds: 10
         imagePullPolicy: Always
