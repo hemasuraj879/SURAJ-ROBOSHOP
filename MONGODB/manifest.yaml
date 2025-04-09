@@ -25,6 +25,17 @@ spec:
       containers:
       - name: mongodb
         image: 296062550816.dkr.ecr.us-east-1.amazonaws.com/suraj/dev/mongodb:latest
+        args:
+        - /bin/sh
+        - -c
+        - touch suraj.txt
+        livenessProbe:
+          exec:
+            command:
+              - cat
+              - suraj.txt
+          initialDelaySeconds: 5
+          periodSeconds: 10
         volumeMounts:
         - name: mongodb
           mountPath: /data/db
