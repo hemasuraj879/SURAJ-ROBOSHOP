@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb
+  namespace: suraj
+  labels:
+    tier: db
+    env: dev
+    project: suraj
+
+spec:
+  selector:
+    matchLabels:
+      tier: db
+      env: dev
+      project: suraj
+    serviceName: mongodb
+    replicas: 3
+    template:
+      metadata:
+        labels:
+          tier: db
+          env: dev
+          project: suraj
+      spec:
+        containers:
+        - name: mongodb
+          image: 296062550816.dkr.ecr.us-east-1.amazonaws.com/suraj/dev/mongodb:latest
+          args:
+          - /bin/sh
+          - -c
+          - touch /tmp/suraj
+          livenessProbe:
+            exec:
+              command:
+                - cat
+                - /tmp/suraj
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "500mi"
+              cpu: "500m"
+            limits:
+              memory: "1000mi"
+              cpu: "1000m"
+          volumemounts:
+          - name: mongodb
+            mountPath: /data/db
+    volumeClaimTemplates:
+    - metadata:
+        name: mongodb
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: "ebs-sc"
+        resources:
+          requests:
+            storage: 5Gi
+
+
