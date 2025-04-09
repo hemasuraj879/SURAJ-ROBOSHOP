@@ -59,3 +59,23 @@ spec:
             storage: 5Gi
 
 
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+  namespace: suraj
+
+spec:
+  clusterIP: None
+  selector:
+    tier: db
+    env: dev
+    project: suraj
+
+  ports:
+  - name: mongodb-port
+    protocol: TCP
+    port: 27017
+    targetPort: 27017
