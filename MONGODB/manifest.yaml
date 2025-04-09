@@ -26,11 +26,13 @@ spec:
       - name: mongodb
         image: 296062550816.dkr.ecr.us-east-1.amazonaws.com/suraj/dev/mongodb:latest
         livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 8080
-          initialDelaySeconds: 3
-          periodSeconds: 3
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - "mongo --eval 'db.adminCommand(\"ping\").ok' --quiet"
+          initialDelaySeconds: 15
+          periodSeconds: 10
         volumeMounts:
         - name: mongodb
           mountPath: /data/db
