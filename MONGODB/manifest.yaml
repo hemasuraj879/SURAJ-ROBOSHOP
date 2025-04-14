@@ -25,14 +25,14 @@ spec:
       containers:
       - name: mongodb
         image: 751510979323.dkr.ecr.us-east-1.amazonaws.com/suraj/dev/mongodb:latest
-        livenessProbe:
-          exec:
-            command:
-              - /bin/bash
-              - -c
-              - mongo --eval 'db.adminCommand({ ping: 1 })'
-          initialDelaySeconds: 30
-          periodSeconds: 10
+        # livenessProbe:
+        #   exec:
+        #     command:
+        #       - /bin/bash
+        #       - -c
+        #       - mongo --eval 'db.adminCommand({ ping: 1 })'
+        #   initialDelaySeconds: 30
+        #   periodSeconds: 10
         volumeMounts:
         - name: mongodb
           mountPath: /data/db
