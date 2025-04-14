@@ -26,9 +26,12 @@ spec:
       - name: mongodb
         image:  751510979323.dkr.ecr.us-east-1.amazonaws.com/suraj/dev/mongodb:latest
         livenessProbe:
-          tcpSocket:
-            port: 27107
-          initialDelaySeconds: 15
+          exec:
+            command:
+              - /bin/bash
+              - -c
+              - mongo --eval 'db.adminCommand({ ping: 1 })'
+          initialDelaySeconds: 30
           periodSeconds: 10
 
         volumeMounts:
