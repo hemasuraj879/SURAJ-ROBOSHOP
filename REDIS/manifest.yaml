@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis
+  namespace: suraj
+  labels:
+    tier: db
+    project: suraj
+    env: dev
+
+spec:
+  selector:
+    matchLabels:
+      tier: db
+      project: suraj
+      env: dev
+  serviceName: redis
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        tier: db
+        project: suraj
+        env: dev
+      
+    spec:
+      containers:
+      - name: redis
+        image: redis
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "500Mi"
+          limits:
+            cpu: "1000m"
+            memory: "1000Mi"
+        volumeMounts:
+        - name: redis
+          mountPath: /data
+        
+  volumeClaimTemplates:
+  - metadata:
+      name: redis
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      storageClassName: "ebs-sc"
+      resources:
+        requests:
+          storage: 5Gi
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  namespace: suraj
+
+spec:
+  clusterIP: None
+  selector:
+    tier: db
+    project: suraj
+    env: dev
+
+  ports:
+  - name: redis-port
+    protocol: TCP
+    port: 6379
+    targetPort: 6379
+
