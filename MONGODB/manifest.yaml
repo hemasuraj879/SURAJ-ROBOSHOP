@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
       - name: mongodb
-        image: 296062550816.dkr.ecr.us-east-1.amazonaws.com/suraj/dev/mongodb:latest
+        image:  751510979323.dkr.ecr.us-east-1.amazonaws.com/suraj/dev/mongodb:latest
         livenessProbe:
           tcpSocket:
             port: 27107
